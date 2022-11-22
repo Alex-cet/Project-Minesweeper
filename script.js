@@ -25,7 +25,6 @@ function createTable() {
                         handleCaseOf0(i, j);
                     }
                 }
-                console.log(clickedCells);
                 checkEndGame();
             }
             row.appendChild(cell);
@@ -41,7 +40,6 @@ function placeBombsRandomly(i) {
     bomb[i] = document.createElement("div");
     bomb[i].id = i + " " + randomColumn;
     document.body.appendChild(bomb[i]);
-    console.log("bomb[" + i + "].id: " + bomb[i].id);
 }
 
 
