@@ -15,24 +15,28 @@ function createTable() {
             let cell = document.createElement("td");
             cell.id = i + " " + j;
             cell.onclick = function() {
-                if (document.getElementById(i + " " + j).id === bomb[i].id) {
-                    gameOver = 1;
-                    checkEndGame();
-                } else {
-                    countNearbyBombs(i, j);
-                    ++clickedCells;
-                    if (document.getElementById(i + " " + j).innerHTML === '' && document.getElementById(i + " " + j).style.backgroundColor === "whitesmoke") {
-                        handleCaseOf0(i, j);
-                    }
-                }
-                checkEndGame();
+                handleLeftClick(i, j);
             }
             row.appendChild(cell);
-        }
+        }   
         grid.appendChild(row);
         placeBombsRandomly(i);
     }
     return grid;
+}
+
+function handleLeftClick(i, j) {
+    if (document.getElementById(i + " " + j).id === bomb[i].id) {
+        gameOver = 1;
+        checkEndGame();
+    } else {
+        countNearbyBombs(i, j);
+        ++clickedCells;
+        if (document.getElementById(i + " " + j).innerHTML === '' && document.getElementById(i + " " + j).style.backgroundColor === "whitesmoke") {
+            handleCaseOf0(i, j);
+        }
+    }
+    checkEndGame();
 }
 
 function placeBombsRandomly(i) {
@@ -40,8 +44,8 @@ function placeBombsRandomly(i) {
     bomb[i] = document.createElement("div");
     bomb[i].id = i + " " + randomColumn;
     document.body.appendChild(bomb[i]);
+    console.log("bomb["+ i + "]: " + bomb[i].id);
 }
-
 
 function handleRightClick() {
     for (let i = 0; i < 8; ++i) {
@@ -63,7 +67,6 @@ function handleRightClick() {
         }
     }
 }
-
 
 function handleCaseOf0(i, j) {
     let rowPosition = i - 1, columnPosition = j;
@@ -92,40 +95,20 @@ function handleCaseOf0(i, j) {
 function countNearbyBombs(i, j) {
     let countBombs = 0, rowPos = i - 1, columnPos = j;
     for (;;) {
-        if (rowPos == i - 1 && columnPos < j + 1 && columnPos > j - 1) {
-            if (columnPos < j + 2 && rowPos > -1) {
-                if (document.getElementById(rowPos + " " + columnPos).id === bomb[rowPos].id) {
-                    ++countBombs;
-                }
+        if (rowPos > -1 && rowPos < 8 && columnPos > -1 && columnPos < 8) {
+            if (document.getElementById(rowPos + " " + columnPos).id === bomb[rowPos].id) {
+                ++countBombs;
             }
+        }
+        if (rowPos == i - 1 && columnPos < j + 1 && columnPos > j - 1) {
             ++columnPos;
         } else if (rowPos < i + 1 && columnPos == j + 1) {
-            if (rowPos > -1 && columnPos < 8) {
-                if (document.getElementById(rowPos + " " + columnPos).id === bomb[rowPos].id) {
-                    ++countBombs;
-                }
-            }
             ++rowPos;
         } else if (rowPos == i + 1 && columnPos > j - 1) {
-            if (rowPos < 8 && columnPos < 8) {
-                if (document.getElementById(rowPos + " " + columnPos).id === bomb[rowPos].id) {
-                    ++countBombs;
-                }
-            }
             --columnPos;
         } else if (rowPos > i - 1 && columnPos == j - 1) {
-            if (rowPos < 8 && columnPos > -1) {
-                if (document.getElementById(rowPos + " " + columnPos).id === bomb[rowPos].id) {
-                    ++countBombs;
-                }
-            }
             --rowPos;
         } else {
-            if (rowPos > -1 && columnPos > -1) {
-                if (document.getElementById(rowPos + " " + columnPos).id === bomb[rowPos].id) {
-                    ++countBombs;
-                }
-            }
             break;
         }
     }  
